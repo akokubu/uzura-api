@@ -7,6 +7,7 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("org.springframework:springloaded:${springBootVersion}")
     }
 }
 
@@ -28,12 +29,20 @@ repositories {
 
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter")
+    compile("org.springframework.boot:spring-boot-starter-web")
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }
 
+import org.gradle.plugins.ide.eclipse.model.SourceFolder
+	
 eclipse {
     classpath {
+		 file.whenMerged {cp ->
+			 cp.entries.findAll { it instanceof SourceFolder && it.path.startsWith("src/main/java") }*.output = "build/classes/main"
+			 cp.entries.findAll { it instanceof SourceFolder && it.path.startsWith("src/main/resources") }*.output = "build/resources/main"
+			 cp.entries.findAll { it instanceof SourceFolder && it.path.startsWith("src/test/java") }*.output = "build/classes/test"
+			 cp.entries.findAll { it instanceof SourceFolder && it.path.startsWith("src/test/resources") }*.output = "build/resources/test"
+		 }
          containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
          containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
     }
