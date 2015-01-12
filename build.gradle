@@ -1,13 +1,15 @@
 buildscript {
     ext {
         springBootVersion = '1.2.0.RELEASE'
+        springLoadedVersion = '1.2.0.RELEASE'
+        domaVersion = '2.0.0'
     }
     repositories {
         mavenCentral()
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-		classpath("org.springframework:springloaded:${springBootVersion}")
+		classpath("org.springframework:springloaded:${springLoadedVersion}")
     }
 }
 
@@ -27,9 +29,27 @@ repositories {
     mavenCentral()
 }
 
+/* DomaのSQLファイルをコンパイルより前に出力先Dirにコピーするための設定 */
+processResources.destinationDir = compileJava.destinationDir
+compileJava.dependsOn processResources
 
 dependencies {
+    compile("org.springframework.boot:spring-boot-starter-parent")
     compile("org.springframework.boot:spring-boot-starter-web")
+    
+    /* TODO:本当はprovided相当にすべきだができてない */
+    compile("org.projectlombok:lombok:1.14.8")
+    
+    /* DBアクセス関連 */
+    compile("org.springframework:spring-jdbc")
+    compile("org.seasar.doma:doma:2.0.1")
+    
+    /* H2database */
+    compile("com.h2database:h2")
+    
+    /* ログの設定 */
+    compile("org.lazyluke:log4jdbc-remix:0.2.7")    
+        
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }
 
