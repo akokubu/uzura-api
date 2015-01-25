@@ -26,16 +26,11 @@ public class AppConfig {
 
 	DataSource realDataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		// FIXME まずpropertyに設定する。その後で環境変数から取る
-// dataSource.setDriverClassName(properties.getDriverClassName());
-// dataSource.setUrl(properties.getUrl());
-// dataSource.setUsername(properties.getUsername());
-// dataSource.setPassword(properties.getPassword());
-
-		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-		dataSource.setUrl("jdbc:mysql://localhost/SampleDB");
-		dataSource.setUsername("uzura");
-		dataSource.setPassword("12345");
+		// FIXME 環境変数から取る
+		dataSource.setDriverClassName(properties.getDriverClassName());
+		dataSource.setUrl(properties.getUrl());
+		dataSource.setUsername(properties.getUsername());
+		dataSource.setPassword(properties.getPassword());
 		return dataSource;
 	}
 
