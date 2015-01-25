@@ -29,8 +29,7 @@ public class CustomerService {
 	/**
 	 * 顧客情報を登録する
 	 * 
-	 * @param customerEntity
-	 *            顧客情報
+	 * @param customerEntity 顧客情報
 	 */
 	public void register(CustomerEntity customerEntity) {
 		customerRepository.insert(customerEntity);
@@ -45,5 +44,15 @@ public class CustomerService {
 	 */
 	public List<CustomerEntity> findAllWithPaging(SelectOptions selectOptions) {
 		return customerRepository.findAllOrderByid(selectOptions);
+	}
+
+	/**
+	 * ID指定で顧客情報を取得する。
+	 * 
+	 * @param id ID
+	 * @return 顧客情報
+	 */
+	public CustomerEntity findById(Integer id) {
+		return customerRepository.findById(id);
 	}
 }

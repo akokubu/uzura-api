@@ -60,4 +60,15 @@ public class CustomerRestControllerIntegrationTest {
 				.body("firstName[1]", is(customer2.getFirstName()));
 	}
 
+	@Test
+	public void ID指定取得() {
+		when()
+				.get("api/customers/{id}", customer1.getId())
+				.then()
+				.statusCode(HttpStatus.OK.value())
+				.body("id", is(customer1.getId()))
+				.body("lastName", is(customer1.getLastName()))
+				.body("firstName", is(customer1.getFirstName()));
+	}
+
 }
