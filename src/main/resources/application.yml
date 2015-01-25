@@ -1,6 +1,19 @@
 spring:
+  profiles:
+    active: dev
+---
+spring:
+  profile: dev
   datasource:
     url: jdbc:mysql://localhost/SampleDB
+    username: uzura
+    password: 12345
+    driverClassName: com.mysql.jdbc.Driver
+---
+spring:
+  profile: test
+  datasource:
+    url: jdbc:mysql://localhost/uzura_test
     username: uzura
     password: 12345
     driverClassName: com.mysql.jdbc.Driver
