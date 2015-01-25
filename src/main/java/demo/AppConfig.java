@@ -1,5 +1,8 @@
 package demo;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import javax.sql.DataSource;
 
 import net.sf.log4jdbc.Log4jdbcProxyDataSource;
@@ -24,18 +27,31 @@ public class AppConfig {
 	@Autowired
 	private DataSourceProperties properties;
 
-	DataSource realDataSource() {
+	DataSource realDataSource() throws URISyntaxException {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		// FIXME 環境変数から取る
 		dataSource.setDriverClassName(properties.getDriverClassName());
-		dataSource.setUrl(properties.getUrl());
-		dataSource.setUsername(properties.getUsername());
-		dataSource.setPassword(properties.getPassword());
+		String url, username, password;
+		String databaseUrl = System.getenv("DATABASE_URL");
+		if (databaseUrl != null) {
+			URI dbUri = new URI(databaseUrl);
+			url = "jdbc:mysql://" + dbUri.getHost() + ":" + dbUri.getPort() + dbUri.getPath();
+			username = dbUri.getUserInfo().split(":")[0];
+			password = dbUri.getUserInfo().split(":")[1];
+		} else {
+			url = properties.getUrl();
+			username = properties.getUsername();
+			password = properties.getPassword();
+		}
+
+		dataSource.setUrl(url);
+		dataSource.setUsername(username);
+		dataSource.setPassword(password);
+
 		return dataSource;
 	}
 
 	@Bean
-	DataSource dataSource() {
+	DataSource dataSource() throws URISyntaxException {
 		return new TransactionAwareDataSourceProxy(
 				new Log4jdbcProxyDataSource(
 						this.realDataSource()
@@ -58,7 +74,11 @@ public class AppConfig {
 
 			@Override
 			public DataSource getDataSource() {
-				return dataSource();
+				try {
+					return dataSource();
+				} catch (URISyntaxException e) {
+					throw new RuntimeException(e);
+				}
 			}
 
 			@Override
