@@ -1,11 +1,16 @@
 package demo.api;
 
+import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.RestAssured.when;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.seasar.doma.jdbc.SelectOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
@@ -15,6 +20,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.jayway.restassured.RestAssured;
+import com.jayway.restassured.config.EncoderConfig;
+import com.jayway.restassured.config.RestAssuredConfig;
+import com.jayway.restassured.http.ContentType;
 
 import demo.UzuraApiApplication;
 import demo.datasource.CustomerRepository;
@@ -71,4 +79,26 @@ public class CustomerRestControllerIntegrationTest {
 				.body("firstName", is(customer1.getFirstName()));
 	}
 
+	@Test
+	public void 新規登録() {
+		List<CustomerEntity> lists = customerRepository.findAllOrderByid(SelectOptions.get());
+		Integer id = lists.get(lists.size() - 1).getId() + 1;
+		CustomerEntity SIZUKA_CHAN = new CustomerEntity(id, "源", "しずか");
+
+		given()
+				.contentType(ContentType.JSON)
+				.config(getUTFConfig())
+				.body(String.format("{ \"lastName\":\"%s\", \"firstName\":\"%s\" }", SIZUKA_CHAN.getLastName(), SIZUKA_CHAN.getFirstName()))
+				.when()
+				.post("/api/customers")
+				.then()
+				.statusCode(HttpStatus.CREATED.value());
+
+		assertThat(customerRepository.findById(id), is(SIZUKA_CHAN));
+	}
+
+	private RestAssuredConfig getUTFConfig() {
+		return new RestAssuredConfig().encoderConfig(
+				EncoderConfig.encoderConfig().defaultContentCharset("UTF-8"));
+	}
 }
