@@ -2,6 +2,8 @@ package demo.api;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.seasar.doma.jdbc.SelectOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,9 +40,21 @@ public class CustomerRestController {
 		return customerService.findById(id);
 	}
 
+	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
+	void modifyCustomer(@PathVariable Integer id, @Valid @RequestBody CustomerRequest request) {
+		CustomerEntity customerEntity = new CustomerEntity(id, request.getLastName(), request.getFirstName());
+		customerService.modify(customerEntity);
+	}
+
+	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	void deleteCustomer(@PathVariable Integer id) {
+		customerService.delete(id);
+	}
+
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
-	void registerCustomer(@RequestBody CustomerRequest request) {
+	void registerCustomer(@Valid @RequestBody CustomerRequest request) {
 		CustomerEntity customerEntity = new CustomerEntity(request.getLastName(), request.getFirstName());
 		customerService.register(customerEntity);
 	}

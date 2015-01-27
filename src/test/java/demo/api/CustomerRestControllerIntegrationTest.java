@@ -3,6 +3,7 @@ package demo.api;
 import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.RestAssured.when;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.util.List;
@@ -95,6 +96,34 @@ public class CustomerRestControllerIntegrationTest {
 				.statusCode(HttpStatus.CREATED.value());
 
 		assertThat(customerRepository.findById(id), is(SIZUKA_CHAN));
+	}
+
+	@Test
+	public void 更新() {
+		List<CustomerEntity> lists = customerRepository.findAllOrderByid(SelectOptions.get());
+		Integer id = lists.get(0).getId();
+		CustomerEntity DORAMI = new CustomerEntity(id, "どら", "ミ");
+
+		given()
+				.contentType(ContentType.JSON)
+				.config(getUTFConfig())
+				.body(String.format("{ \"lastName\":\"%s\", \"firstName\":\"%s\" }", DORAMI.getLastName(), DORAMI.getFirstName()))
+				.when()
+				.put("/api/customers/{id}", DORAMI.getId())
+				.then()
+				.statusCode(HttpStatus.OK.value());
+
+		assertThat(customerRepository.findById(DORAMI.getId()), is(DORAMI));
+	}
+
+	@Test
+	public void 削除() {
+		when()
+				.delete("/api/customers/{id}", customer1.getId())
+				.then()
+				.statusCode(HttpStatus.NO_CONTENT.value());
+
+		assertThat(customerRepository.findById(customer1.getId()), is(nullValue()));
 	}
 
 	private RestAssuredConfig getUTFConfig() {

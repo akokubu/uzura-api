@@ -49,10 +49,30 @@ public class CustomerService {
 	/**
 	 * ID指定で顧客情報を取得する。
 	 * 
-	 * @param id ID
+	 * @param id 顧客ID
 	 * @return 顧客情報
 	 */
 	public CustomerEntity findById(Integer id) {
 		return customerRepository.findById(id);
 	}
+
+	/**
+	 * 顧客情報を更新する。
+	 * 
+	 * @param customerEntity 顧客情報
+	 */
+	public void modify(CustomerEntity customerEntity) {
+		customerRepository.update(customerEntity);
+	}
+
+	/**
+	 * 顧客情報を削除する。
+	 * 
+	 * @param id 顧客ID
+	 */
+	public void delete(Integer id) {
+		CustomerEntity customerEntity = customerRepository.findById(id);
+		customerRepository.delete(customerEntity);
+	}
+
 }
