@@ -1,6 +1,0 @@
-spring:
-  datasource:
-    url: jdbc:mysql://localhost/SampleDB
-    username: uzura
-    password: 12345
-    driverClassName: com.mysql.jdbc.Driver
