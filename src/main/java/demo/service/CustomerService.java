@@ -44,6 +44,6 @@ public class CustomerService {
 	 * @return 顧客リスト
 	 */
 	public List<CustomerEntity> findAllWithPaging(SelectOptions selectOptions) {
-		return customerRepository.findAllOrderByid(selectOptions);
+		return customerRepository.findAllOrderById(selectOptions);
 	}
 }
