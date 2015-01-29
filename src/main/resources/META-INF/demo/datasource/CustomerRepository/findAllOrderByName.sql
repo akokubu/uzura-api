@@ -1,1 +1,0 @@
-select * from customers order by first_name, last_name;
