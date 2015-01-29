@@ -1,22 +1,17 @@
 package demo;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
 import javax.sql.DataSource;
 
 import net.sf.log4jdbc.Log4jdbcProxyDataSource;
 
 import org.seasar.doma.jdbc.Config;
 import org.seasar.doma.jdbc.NoCacheSqlFileRepository;
+import org.seasar.doma.jdbc.SimpleDataSource;
 import org.seasar.doma.jdbc.SqlFileRepository;
 import org.seasar.doma.jdbc.dialect.Dialect;
-import org.seasar.doma.jdbc.dialect.MysqlDialect;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.seasar.doma.jdbc.dialect.H2Dialect;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -24,34 +19,15 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class AppConfig {
 
-	@Autowired
-	private DataSourceProperties properties;
-
-	DataSource realDataSource() throws URISyntaxException {
-		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		dataSource.setDriverClassName(properties.getDriverClassName());
-		String url, username, password;
-		String databaseUrl = System.getenv("DATABASE_URL");
-		if (databaseUrl != null) {
-			URI dbUri = new URI(databaseUrl);
-			url = "jdbc:mysql://" + dbUri.getHost() + ":" + dbUri.getPort() + dbUri.getPath();
-			username = dbUri.getUserInfo().split(":")[0];
-			password = dbUri.getUserInfo().split(":")[1];
-		} else {
-			url = properties.getUrl();
-			username = properties.getUsername();
-			password = properties.getPassword();
-		}
-
-		dataSource.setUrl(url);
-		dataSource.setUsername(username);
-		dataSource.setPassword(password);
-
+	DataSource realDataSource() {
+		SimpleDataSource dataSource = new SimpleDataSource();
+		dataSource.setUrl("jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
+		dataSource.setUser("sa");
 		return dataSource;
 	}
 
 	@Bean
-	DataSource dataSource() throws URISyntaxException {
+	DataSource dataSource() {
 		return new TransactionAwareDataSourceProxy(
 				new Log4jdbcProxyDataSource(
 						this.realDataSource()
@@ -60,7 +36,7 @@ public class AppConfig {
 
 	@Bean
 	Dialect dialect() {
-		return new MysqlDialect();
+		return new H2Dialect();
 	}
 
 	@Bean
@@ -74,11 +50,7 @@ public class AppConfig {
 
 			@Override
 			public DataSource getDataSource() {
-				try {
-					return dataSource();
-				} catch (URISyntaxException e) {
-					throw new RuntimeException(e);
-				}
+				return dataSource();
 			}
 
 			@Override
