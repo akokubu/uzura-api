@@ -34,4 +34,6 @@ public interface CustomerRepository {
 	@Delete
 	public Result<CustomerEntity> delete(CustomerEntity customerEntity);
 
+	@Delete(sqlFile = true)
+	public int deleteAll();
 }
