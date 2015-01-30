@@ -34,7 +34,11 @@ public class AppConfig {
 		String databaseUrl = System.getenv("CLEARDB_DATABASE_URL");
 		if (databaseUrl != null) {
 			URI dbUri = new URI(databaseUrl);
-			url = "jdbc:mysql://" + dbUri.getHost() + ":" + dbUri.getPort() + dbUri.getPath();
+			Integer port = dbUri.getPort();
+			if (port < 0) {
+				port = 3306;
+			}
+			url = "jdbc:mysql://" + dbUri.getHost() + ":" + port + dbUri.getPath();
 			username = dbUri.getUserInfo().split(":")[0];
 			password = dbUri.getUserInfo().split(":")[1];
 		} else {
