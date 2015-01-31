@@ -78,6 +78,6 @@ task wrapper(type: Wrapper) {
     gradleVersion = '1.12'
 }
 
-task stage(dependsOn: ['build'])
+task stage(dependsOn: ['assemble'])
 
 defaultTasks "clean", "build"

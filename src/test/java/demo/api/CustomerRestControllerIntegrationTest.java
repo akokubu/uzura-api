@@ -82,7 +82,7 @@ public class CustomerRestControllerIntegrationTest {
 
 	@Test
 	public void 新規登録() {
-		List<CustomerEntity> lists = customerRepository.findAllOrderByid(SelectOptions.get());
+		List<CustomerEntity> lists = customerRepository.findAllOrderById(SelectOptions.get());
 		Integer id = lists.get(lists.size() - 1).getId() + 1;
 		CustomerEntity SIZUKA_CHAN = new CustomerEntity(id, "源", "しずか");
 
@@ -100,7 +100,7 @@ public class CustomerRestControllerIntegrationTest {
 
 	@Test
 	public void 更新() {
-		List<CustomerEntity> lists = customerRepository.findAllOrderByid(SelectOptions.get());
+		List<CustomerEntity> lists = customerRepository.findAllOrderById(SelectOptions.get());
 		Integer id = lists.get(0).getId();
 		CustomerEntity DORAMI = new CustomerEntity(id, "どら", "ミ");
 
