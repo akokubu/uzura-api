@@ -50,7 +50,7 @@ public class AppConfig {
 			if (port < 0) {
 				port = 3306;
 			}
-			url = "jdbc:mysql://" + dbUri.getHost() + ":" + port + dbUri.getPath();
+			url = "jdbc:mysql://" + dbUri.getHost() + ":" + port + dbUri.getPath() + "&characterEncoding=utf8";
 			username = dbUri.getUserInfo().split(":")[0];
 			password = dbUri.getUserInfo().split(":")[1];
 		} else {
