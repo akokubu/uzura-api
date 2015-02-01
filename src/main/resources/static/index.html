@@ -1,1 +1,48 @@
-Hello, Spring Boot Sample Application! for static
+<!doctype html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8" />
+	<link rel="stylesheet" href="./bower_components/bootstrap-css-only/css/bootstrap.min.css" />
+	<title>Document</title>
+</head>
+<body ng-app="myApp">
+  <div class="container" ng-controller="AppController">
+  	<div class="page-header">
+      <h1>顧客一覧</h1>	
+  	</div>
+    <div class="alert alert-info" role="alert" ng-hide="items && items.length > 0">
+      there are not items yet.
+    </div>
+    <form class="form-horizontal" role="from" ng-submit="addItem(newItem)">
+      <div class="form-group" ng-repeat="item in items">
+        <div class="col-xs-6">
+          {{item.firstName}}
+        </div>
+        <div class="col-xs-6">
+          {{item.lastName}}
+        </div>
+      </div>
+      <hr />
+      <div class="input-group">
+        <span class="input-group-addon">firstName</span>
+      	<input type="text" class="form-control" ng-model="newItem.firstName" />
+        <span class="input-group-addon">lastName</span>
+      	<input type="text" class="form-control" ng-model="newItem.lastName" />
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="submit" ng-disabled="!newItem" title="Add">
+            <span class="glyphicon glyphicon-plus"></span>
+          </button>
+        </span>
+      </div>      
+    </form>
+        
+  </div>
+  
+  <script type="text/javascript" src="./bower_components/angular/angular.min.js"></script>
+  <script type="text/javascript" src="./bower_components/angular-resource/angular-resource.min.js"></script>
+  <script type="text/javascript" src="./bower_components/lodash/lodash.min.js"></script>
+  <script type="text/javascript" src="./app/app.js"></script>
+  <script type="text/javascript" src="./app/controllers.js"></script>
+  <script type="text/javascript" src="./app/services.js"></script>
+</body>
+</html>
