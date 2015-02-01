@@ -7,7 +7,7 @@ import org.seasar.doma.jdbc.SelectOptions;
 public class Paging {
 
 	private static final int DEFAULT_PAGE_NUMBER = 1;
-	private static final int DEFAULT_RECORD_COUNT = 2;
+	private static final int DEFAULT_RECORD_COUNT = 20;
 
 	/** 表示したいページ番号 */
 	private Optional<Integer> pageNumber = Optional.empty();
