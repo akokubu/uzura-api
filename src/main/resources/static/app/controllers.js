@@ -5,7 +5,6 @@
 		});
 		
 		$scope.addItem = function(newItem) {
-			console.log(newItem);
 			new Item({
 				firstName: newItem.firstName,
 				lastName: newItem.lastName
@@ -14,6 +13,12 @@
 			});
 			$scope.newItem = "";
 		};
+		
+		$scope.deleteItem = function(item) {
+          item.$remove(function() {
+		    $scope.items.splice($scope.items.indexOf(item), 1);
+		  });	
+		}
 	};
 	
 	AppController.$inject = ['$scope', 'Item'];
