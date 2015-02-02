@@ -14,7 +14,7 @@
       <h1>タスク管理</h1>
     </div>
     <form class="input-group input-group-lg" ng-submit="addTask()">
-      <input type="text" required placeholder="新しいタスクを入力" class="form-control input-lg" />
+      <input type="text" required placeholder="新しいタスクを入力" class="form-control input-lg" ng-model="newTask" />
       <span class="input-group-btn">
         <button type="submit" class="btn btn-default">追加</button>    
       </span>
@@ -39,10 +39,10 @@
     <hr />
     
     <ul class="list-unstyled">
-      <li class="todo-item" ng-repeat="task in tasks">
+      <li class="todo-item" ng-repeat="task in tasks" ng-class="{done: task.done}">
         <form class="input-group input-group-lg">
           <label class="input-group-addon">
-            <input type="checkbox" />        
+            <input type="checkbox" ng-model="task.done" />        
           </label>
           <p class="form-control input-lg todo-title">{{ task.title }}</p>
           <span class="input-group-btn del-btn">
