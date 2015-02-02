@@ -22,7 +22,7 @@
 		$scope.currentFilter = null;
 		
 		// フィルタリング条件の変更
-		$scope.changeFilter(filter) {
+		$scope.changeFilter = function(filter) {
 			$scope.currentFilter = filter;
 		};
 		
