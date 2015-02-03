@@ -34,6 +34,14 @@
 			$scope.remainingCount = length - $scope.doneCount;
 		}, true);
 		
+		var originalTask;		// 編集前のタスク
+		$scope.editing = null;	// 編集モードのタスクモデル
+		
+		$scope.editTask = function(task) {
+			originalTask = task.title;
+			$scope.editing = task;
+		}
+		
 		
 	　}]);
 }(angular));
