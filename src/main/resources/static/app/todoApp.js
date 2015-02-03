@@ -1,6 +1,6 @@
 (function(angular) {
 	angular.module("uzuraApp", [])
-	　.controller('MainController', ['$scope', function($scope) {
+	　.controller('MainController', ['$scope', '$filter', function($scope, $filter) {
 		$scope.tasks = [];
 		$scope.newTask = '';
 		
@@ -25,6 +25,14 @@
 		$scope.changeFilter = function(filter) {
 			$scope.currentFilter = filter;
 		};
+		
+		var where = $filter('filter');
+		$scope.$watch('tasks', function(tasks) {
+			// tasksが増減したり各要素が変更された時に実行される
+			var length = tasks.length;
+			$scope.doneCount = where(tasks, $scope.filter.done).length;
+			$scope.remainingCount = length - $scope.doneCount;
+		}, true);
 		
 		
 	　}]);
