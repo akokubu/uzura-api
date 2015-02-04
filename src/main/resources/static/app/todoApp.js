@@ -1,6 +1,6 @@
 (function(angular) {
 	angular.module("uzuraApp", [])
-	　.controller('MainController', ['$scope', '$filter', function($scope, $filter) {
+	.controller('MainController', ['$scope', '$filter', function($scope, $filter) {
 		$scope.tasks = [];
 		$scope.newTask = '';
 		
@@ -42,6 +42,27 @@
 			$scope.editing = task;
 		}
 		
+		$scope.doneEdit = function(taskForm){
+			if (taskForm.$invalid) {
+				$scope.editing.title = originalTitle;
+			}
+			$scope.editing = originalTask = null;
+		}
 		
-	　}]);
+	}])
+	.directive('mySelect', function($timeout, $parse) {
+		return function(scope, $el, attrs) {
+			// scope ‐ 現在の$scopeオブジェクト,
+			// $el   - jqLiteオブジェクト
+			// attrs - DOM属性のハッシュ
+			scope.$watch(attrs.mySelect, function(val) {
+				if (val) {
+					$timeout(function() {
+						$el[0].select(); 
+			        });
+				}
+			});
+		};
+	});
+	
 }(angular));

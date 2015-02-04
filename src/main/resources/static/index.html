@@ -40,12 +40,13 @@
     
     <ul class="list-unstyled">
       <li class="todo-item" ng-repeat="task in tasks | filter: currentFilter" ng-class="{done: task.done, editing: task == editing}">
-        <form class="input-group input-group-lg">
+        <form name="taskForm" ng-submit="doneEdit(taskForm)" class="input-group input-group-lg">
           <label class="input-group-addon">
             <input type="checkbox" ng-model="task.done" />        
           </label>
           <p class="form-control input-lg todo-title" ng-dblclick="editTask(task)" ng-hide="task == editing">{{ task.title }}</p>
-          <input type="text" required class="form-control input-lg" ng-model="task.title" ng-show="task == editing">
+          <input type="text" required class="form-control input-lg" ng-model="task.title" 
+          		ng-show="task == editing" my-select="task == editing" ng-blur="doneEdit(taskForm)">
           <span class="input-group-btn del-btn">
             <button type="reset" class="btn btn-danger" ng-if="task != editing">削除</button>
           </span>
