@@ -44,7 +44,7 @@
 		
 		$scope.doneEdit = function(taskForm){
 			if (taskForm.$invalid) {
-				$scope.editing.title = originalTitle;
+				$scope.editing.title = originalTask;
 			}
 			$scope.editing = originalTask = null;
 		}
