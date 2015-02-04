@@ -60,6 +60,17 @@
 			});
 		}
 		
+		// 完了したTaskを全て削除
+		$scope.removeDoneTask = function() {
+			$scope.tasks = where($scope.tasks, $scope.filter.remaining);
+		}
+		
+		// 任意のTaskを削除
+		$scope.removeTask = function(currentTask) {
+			$scope.tasks = where($scope.tasks, function(task) {
+				return currentTask !== task;
+			});
+		};
 	}])
 	.directive('mySelect', function($timeout, $parse) {
 		return function(scope, $el, attrs) {
