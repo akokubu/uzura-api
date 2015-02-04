@@ -49,6 +49,17 @@
 			$scope.editing = originalTask = null;
 		}
 		
+		// 全て完了、未完了
+		$scope.checkAll = function() {
+			console.log($scope.remainingCount)
+			console.log(!$scope.remainingCount)
+			var state = !!$scope.remainingCount;
+			
+			angular.forEach($scope.tasks, function(task) {
+				task.done = state
+			});
+		}
+		
 	}])
 	.directive('mySelect', function($timeout, $parse) {
 		return function(scope, $el, attrs) {
