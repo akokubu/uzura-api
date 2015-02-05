@@ -38,7 +38,7 @@
     
     <hr />
     
-    <ul class="list-unstyled">
+    <ul ng-controller="TaskListController" class="list-unstyled">
       <li class="todo-item" ng-repeat="task in tasks | filter: currentFilter" ng-class="{done: task.done, editing: task == editing}">
         <form name="taskForm" ng-submit="doneEdit(taskForm)" class="input-group input-group-lg">
           <label class="input-group-addon">

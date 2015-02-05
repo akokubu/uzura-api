@@ -84,6 +84,31 @@
 			taskService.removeDone();
 		};
 	}]);
+	.controller('TaskListController', ['$scope', 'taskService', function($scope, taskService) {
+		$scope.on('change:list', function(evt, list) {
+			$scope.taskList = list;
+		});
+		
+		var originalTitle;
+		
+		$scope.editing = null;
+		
+		$scope.editTask = function(task) {
+			originalTitle = task.title;
+			$scope.ediging = task;
+		};
+		
+		$scope.doneEdit = function(taskForm) {
+			if (taskForm.$invalid) {
+				$scope.editing.title = originalTitle;
+			}
+			$scope.editing = originalTitle = null;
+		};
+		
+		$scope.removeTask = function(task) {
+			taskService.remove(task);
+		};
+	}])
 	.controller('MainController', ['$scope', '$filter', function($scope, $filter) {
 		$scope.tasks = [];
 		
