@@ -110,67 +110,11 @@
 		};
 	}])
 	.controller('MainController', ['$scope', '$filter', function($scope, $filter) {
-		$scope.tasks = [];
-		
-		// フィルタリング条件
-		$scope.filter = {
-			done: { done: true }, // 完了のみ
-			remaining: { done: false } // 未完了のみ
-		};
-		
-		// 現在のフィルタの状態モデル
 		$scope.currentFilter = null;
 		
-		// フィルタリング条件の変更
-		$scope.changeFilter = function(filter) {
+		$scope.on('change:filter', function(evt, filter) {
 			$scope.currentFilter = filter;
-		};
-		
-		var where = $filter('filter');
-		$scope.$watch('tasks', function(tasks) {
-			// tasksが増減したり各要素が変更された時に実行される
-			var length = tasks.length;
-			$scope.doneCount = where(tasks, $scope.filter.done).length;
-			$scope.remainingCount = length - $scope.doneCount;
-		}, true);
-		
-		var originalTask;		// 編集前のタスク
-		$scope.editing = null;	// 編集モードのタスクモデル
-		
-		$scope.editTask = function(task) {
-			originalTask = task.title;
-			$scope.editing = task;
-		}
-		
-		$scope.doneEdit = function(taskForm){
-			if (taskForm.$invalid) {
-				$scope.editing.title = originalTask;
-			}
-			$scope.editing = originalTask = null;
-		}
-		
-		// 全て完了、未完了
-		$scope.checkAll = function() {
-			console.log($scope.remainingCount)
-			console.log(!$scope.remainingCount)
-			var state = !!$scope.remainingCount;
-			
-			angular.forEach($scope.tasks, function(task) {
-				task.done = state
-			});
-		}
-		
-		// 完了したTaskを全て削除
-		$scope.removeDoneTask = function() {
-			$scope.tasks = where($scope.tasks, $scope.filter.remaining);
-		}
-		
-		// 任意のTaskを削除
-		$scope.removeTask = function(currentTask) {
-			$scope.tasks = where($scope.tasks, function(task) {
-				return currentTask !== task;
-			});
-		};
+		});
 	}])
 	.directive('mySelect', function($timeout, $parse) {
 		return function(scope, $el, attrs) {
