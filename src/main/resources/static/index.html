@@ -27,7 +27,7 @@
         <button class="btn btn-success" ng-click="checkAll()">全て完了/未完了</button>
       </div>
       <div class="btn-group">
-        <button ng-click="changeFilter()" class="btn btn-default" ng-class="{active: !currentFilter}">全部 <span class="badge">{{tasks.length}}</span></button>
+        <button ng-click="changeFilter()" class="btn btn-default" ng-class="{active: !currentFilter}">全部 <span class="badge">{{ allCount }}</span></button>
         <button ng-click="changeFilter(filter.remaining)" class="btn btn-default" ng-class="{active: currentFilter == filter.remaining}">未完了 <span class="badge">{{ remainingCount }}</span></button>
         <button ng-click="changeFilter(filter.done)" class="btn btn-default"  ng-class="{active: currentFilter == filter.done}">完了　 <span class="badge">{{ doneCount }}</span></button>
       </div>

@@ -27,12 +27,10 @@
 		
 		// Taskを受け取り新しいTaskリストに加える
 		this.add = function(title) {
-			console.log(title);
 			list.push({
 				title: title,
 				done: false
 			});
-			console.log(list);
 		};
 		
 		this.remove = function(currentTask) {
@@ -54,7 +52,7 @@
 	}])
 	.controller('RegisterController', ['$scope', 'taskService', function($scope, taskService) {
 		$scope.newTask = '';
-		
+	
 		$scope.addTask = function() {
 			taskService.add($scope.newTask);
 			$scope.newTask = '';
@@ -69,7 +67,7 @@
                         
             $scope.allCount = length;
             $scope.doneCount = doneCount;
-            $scope.remaningCount = length - doneCount;
+            $scope.remainingCount = length - doneCount;
 		});
 		
 		$scope.checkAll = function() {
@@ -77,7 +75,7 @@
 		};
 		
 		$scope.changeFilter = function(filter) {
-			$scope.emit('change:filter', filter);
+			$scope.$emit('change:filter', filter);
 		};
 		
 		$scope.removeDoneTask = function() {
