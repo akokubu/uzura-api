@@ -27,7 +27,7 @@
 		
 		// Taskを受け取り新しいTaskリストに加える
 		this.add = function(title) {
-			console.log("add");
+			console.log(title);
 			list.push({
 				title: title,
 				done: false
@@ -56,16 +56,16 @@
 		$scope.newTask = '';
 		
 		$scope.addTask = function() {
-			taskService.add($scope.newTitle);
+			taskService.add($scope.newTask);
 			$scope.newTask = '';
 		};
 	}])
 	.controller('ToolbarController', ['$scope', 'taskService', function($scope, taskService) {
 		$scope.filter = taskService.filter;
 		
-		$scope.on('change:list', function(evt, list) {
+		$scope.$on('change:list', function(evt, list) {
 			var length = list.length;
-            var doneCount = tasks.getDone().length;
+            var doneCount = taskService.getDone().length;
                         
             $scope.allCount = length;
             $scope.doneCount = doneCount;
@@ -83,10 +83,10 @@
 		$scope.removeDoneTask = function() {
 			taskService.removeDone();
 		};
-	}]);
+	}])
 	.controller('TaskListController', ['$scope', 'taskService', function($scope, taskService) {
-		$scope.on('change:list', function(evt, list) {
-			$scope.taskList = list;
+		$scope.$on('change:list', function(evt, list) {
+			$scope.tasks = list;
 		});
 		
 		var originalTitle;
@@ -112,7 +112,7 @@
 	.controller('MainController', ['$scope', '$filter', function($scope, $filter) {
 		$scope.currentFilter = null;
 		
-		$scope.on('change:filter', function(evt, filter) {
+		$scope.$on('change:filter', function(evt, filter) {
 			$scope.currentFilter = filter;
 		});
 	}])
