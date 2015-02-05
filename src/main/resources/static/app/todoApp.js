@@ -1,16 +1,67 @@
 (function(angular) {
 	angular.module("uzuraApp", [])
-	.controller('MainController', ['$scope', '$filter', function($scope, $filter) {
-		$scope.tasks = [];
+	.service('taskService', ['$rootScope', '$filter', function($scope, $filter) {
+		var list = []; // Taskリスト
+		
+		$scope.$watch(function() {
+			return list;
+		}, function(value) {
+			$scope.$broadcast('change:list', value);
+		}, true);
+		
+		var where = $filter('filter');
+		
+		var done = { done: true };
+		var remaining = { done: false };
+		
+		// リストが扱えるフィルタリング条件
+		this.filter = {
+			done: done,
+			remaining: remaining
+		};
+		
+		// 完了状態のTaskのみを抽出して返す
+		this.getDone = function() {
+			return where(list, done);
+		};
+		
+		// Taskを受け取り新しいTaskリストに加える
+		this.add = function(title) {
+			console.log("add");
+			list.push({
+				title: title,
+				done: false
+			});
+			console.log(list);
+		};
+		
+		this.remove = function(currentTask) {
+			list = where(list, function(task) {
+				return currentTask !== task; 
+			});
+		};
+		
+		this.removeDone = function() {
+			list = where(list, remaining);
+		};
+		
+		// リスト内のTaskすべての状態を引数に合わせる
+		this.changeState = function(state) {
+			angular.forEac(list, function(task) {
+				task.done = state;
+			});
+		};
+	}])
+	.controller('RegisterController', ['$scope', 'taskService', function($scope, taskService) {
 		$scope.newTask = '';
 		
 		$scope.addTask = function() {
-			$scope.tasks.push({
-				title: $scope.newTask,
-				done: false
-			});
+			taskService.add($scope.newTitle);
 			$scope.newTask = '';
-		}
+		};
+	}])
+	.controller('MainController', ['$scope', '$filter', function($scope, $filter) {
+		$scope.tasks = [];
 		
 		// フィルタリング条件
 		$scope.filter = {
