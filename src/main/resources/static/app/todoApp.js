@@ -60,6 +60,30 @@
 			$scope.newTask = '';
 		};
 	}])
+	.controller('ToolbarController', ['$scope', 'taskService', function($scope, taskService) {
+		$scope.filter = taskService.filter;
+		
+		$scope.on('change:list', function(evt, list) {
+			var length = list.length;
+            var doneCount = tasks.getDone().length;
+                        
+            $scope.allCount = length;
+            $scope.doneCount = doneCount;
+            $scope.remaningCount = length - doneCount;
+		});
+		
+		$scope.checkAll = function() {
+			taskService.changeState(!!$scope.remainingCount);
+		};
+		
+		$scope.changeFilter = function(filter) {
+			$scope.emit('change:filter', filter);
+		};
+		
+		$scope.removeDoneTask = function() {
+			taskService.removeDone();
+		};
+	}]);
 	.controller('MainController', ['$scope', '$filter', function($scope, $filter) {
 		$scope.tasks = [];
 		

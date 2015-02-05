@@ -22,7 +22,7 @@
     
     <hr />
     
-    <div class="btn-toolbar">
+    <div ng-controller="ToolbarController" class="btn-toolbar">
       <div class="btn-group">
         <button class="btn btn-success" ng-click="checkAll()">全て完了/未完了</button>
       </div>
@@ -52,26 +52,6 @@
           </span>
         </form>
       </li>
-      <!-- 
-      <li class="todo-item done">
-        <form class="input-group input-group-lg">
-          <label class="input-group-addon">
-            <input type="checkbox" />        
-          </label>
-          <p class="form-control input-lg todo-title">完了したタスク</p>
-          <span class="input-group-btn del-btn">
-            <button type="reset" class="btn btn-danger">削除</button>
-          </span>
-        </form>
-      </li>      
-      <li class="todo-item editing">
-        <form class="input-group input-group-lg">
-          <label class="input-group-addon">
-            <input type="checkbox" />        
-          </label>
-          <input type="text" required class="form-control input-lg" value="編集中のタスク" />
-        </form>
-      </li>       -->
     </ul>
   </div>
   
