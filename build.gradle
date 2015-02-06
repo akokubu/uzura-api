@@ -74,6 +74,21 @@ eclipse {
     }
 }
 
+buildscript {
+    repositories { maven { url 'http://bluepapa32.github.io/maven/' } }
+    dependencies { classpath 'com.bluepapa32.gradle.plugins:gradle-watch-plugin:0.1.0' }
+}
+
+apply plugin: 'watch'
+
+watch {
+    resources {
+        files fileTree(dir: 'src/main/resources',       // FileTree で指定
+                       include: '**/*')
+        tasks 'processResources'
+    }
+}
+
 task wrapper(type: Wrapper) {
     gradleVersion = '1.12'
 }
