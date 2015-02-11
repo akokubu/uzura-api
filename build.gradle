@@ -10,6 +10,7 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 		classpath("org.springframework:springloaded:${springLoadedVersion}")
+	    classpath("org.flywaydb:flyway-gradle-plugin:3.1")
     }
 }
 
@@ -17,6 +18,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot' 
+apply plugin: 'flyway'
 
 jar {
     baseName = 'uzura-api'
@@ -36,7 +38,7 @@ compileJava.dependsOn processResources
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-parent")
     compile("org.springframework.boot:spring-boot-starter-web")
-    
+		    
     /* TODO:本当はprovided相当にすべきだができてない */
     compile("org.projectlombok:lombok:1.14.8")
     
@@ -51,11 +53,19 @@ dependencies {
     compile("mysql:mysql-connector-java:5.1.34")
     
     /* ログの設定 */
-    compile("org.lazyluke:log4jdbc-remix:0.2.7")    
+    compile("org.lazyluke:log4jdbc-remix:0.2.7")
+    
+    /* DB migration */
+    compile("org.flywaydb:flyway-core:3.1")
         
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("com.jayway.restassured:rest-assured:2.3.3")
 }
+
+flyway {
+  validateOnMigrate = false
+}
+
 
 import org.gradle.plugins.ide.eclipse.model.SourceFolder
 	
