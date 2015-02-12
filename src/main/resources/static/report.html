@@ -32,11 +32,16 @@
 
   <script type="text/ng-template" id="index-tmpl">
     <h1>帳票一覧</h1>
-    <ul>
-      <li>#x yyyy/mm/dd <a href="#/sheet/x">詳細を確認する</a></li>
-      <li>#y yyyy/mm/dd <a href="#/sheet/y">詳細を確認する</a></li>
-      <li>#z yyyy/mm/dd <a href="#/sheet/z">詳細を確認する</a></li>
+    <ul ng-show="list.length">
+      <li ng-repeat="sheet in list">
+        #{{ sheet.id }}
+        {{ sheet.createdAt | date: 'yyyy/MM/dd HH:mm' }}
+        <a ng-href="#/sheet/{{ sheet.id }}">詳細を確認する</a>
+      </li>
     </ul>
+    <div class="alert alert-info" ng-hide="list.length">
+      帳票が存在しません <a href="#/new" class="alert-link">新しい帳票を作る</a>
+    </div>
   </script>
 
   <script type="text/ng-template" id="new-tmpl">
@@ -73,7 +78,7 @@
       <div>
         <button type="button" class="btn btn-primary" ng-click="addLine()">明細行を追加</button>
         <button type="button" class="btn btn-danger" ng-click="initialize()">帳票を初期化</button>
-        <button type="button" class="btn btn-success">帳票を保存</button>
+        <button type="submit" class="btn btn-success">帳票を保存</button>
       </div>
     </form>
   </script>
