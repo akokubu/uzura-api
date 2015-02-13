@@ -45,7 +45,7 @@
 		
 		// リスト内のTaskすべての状態を引数に合わせる
 		this.changeState = function(state) {
-			angular.forEac(list, function(task) {
+			angular.forEach(list, function(task) {
 				task.done = state;
 			});
 		};
