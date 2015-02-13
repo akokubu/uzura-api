@@ -25,6 +25,10 @@ angular.module('ReportApp', ['ngRoute'])
 		angular.extend($scope, counting);
 		
 		$scope.integer = "/^\d+$/";
+		
+		$scope.$watch('lines.length < 2', function(val) {
+			$scope.disableDelBtn = val;
+		})
 
 		$scope.initialize();
 	}])
