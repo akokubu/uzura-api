@@ -66,6 +66,11 @@ dependencies {
 
 flyway {
   validateOnMigrate = false
+  driver = 'com.mysql.jdbc.Driver'
+  url = 'jdbc:mysql://localhost/uzura'
+  user = 'uzura'
+  password = '12345'
+  initVersion = '0.1.0'
 }
 
 
