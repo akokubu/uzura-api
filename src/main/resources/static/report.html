@@ -63,8 +63,8 @@
         <tbody>
           <tr ng-repeat="orderLine in lines">
             <td><input class="form-control" type="text" ng-model="orderLine.productName" required/></th>
-            <td><input class="form-control" type="number" ng-model="orderLine.unitPrice" required min="0" ng-pattern="/^\d+$/" /></th>
-            <td><input class="form-control" type="number" ng-model="orderLine.count" required min="0" ng-pattern="/^\d+$/" /></th>
+            <td><input class="form-control" type="number" ng-model="orderLine.unitPrice" required min="0" ng-pattern="integer" /></th>
+            <td><input class="form-control" type="number" ng-model="orderLine.count" required min="0" ng-pattern="integer" /></th>
             <td>{{ getSubtotal(orderLine) | number }}</td>
             <td><button type="button" class="btn btn-default" ng-disabled="lines.length < 2" ng-click="removeLine(orderLine)">削除</button></td>
           </tr>

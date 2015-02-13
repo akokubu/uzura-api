@@ -20,7 +20,19 @@ angular.module('ReportApp', ['ngRoute'])
 	.controller('SheetListController', ['$scope', 'sheets', function SheetListController($scope, sheets) {
 		$scope.list = sheets.list;
 	}])
-	.controller('CreationController', ['$scope', '$location', 'sheets', function CreationController($scope, $location, sheets) {
+	.controller('CreationController', ['$scope', '$location', 'sheets', 'counting', 'sheetAction', function CreationController($scope, $location, sheets, counting, sheetAction) {
+		angular.extend($scope, sheetAction);
+		angular.extend($scope, counting);
+		
+		$scope.integer = "/^\d+$/";
+
+		$scope.initialize();
+	}])
+	.controller('SheetController', ['$scope', '$routeParams', 'sheets', 'counting', function SheetController($scope, $params, sheets, counting) {
+		angular.extend($scope, sheets.get($params.id));
+		angular.extend($scope, counting)
+	}])
+	.service('sheetAction', ['$location', 'sheets', function($location, sheets) {
 		function createOrderLine() {
 			return {
 				productName: '',
@@ -28,70 +40,34 @@ angular.module('ReportApp', ['ngRoute'])
 				count: 0
 			};
 		}
-		
 		// リストモデルに新しい明細行を追加する
-		$scope.addLine = function() {
-			$scope.lines.push(createOrderLine());
+		this.addLine = function() {
+			this.lines.push(createOrderLine());
 		};
 		
 		// リストモデルを初期化する
-		$scope.initialize = function() {
-			$scope.lines = [createOrderLine()];
+		this.initialize = function() {
+			this.lines = [createOrderLine()];
 		};
 		
 		// リストモデルから帳票モデルを作成して保存
-		$scope.save = function() {
-			sheets.add($scope.lines);
+		this.save = function() {
+			sheets.add(this.lines);
 			$location.path('/');
 			
 		};
 		
 		// 任意の明細行をリストモデルから取り除く
-		$scope.removeLine = function(target) {
-			var lines = $scope.lines;
+		this.removeLine = function(target) {
+			var lines = this.lines;
 			var index = lines.indexOf(target);
 			
 			if (index !== -1) {
 				lines.splice(index, 1);
 			}
-		};
+        };		
 		
-		// 引数から小計を計算して返す
-		$scope.getSubtotal = function(orderLine) {
-			return orderLine.unitPrice * orderLine.count;
-		};
-		
-		// リストから合計金額を計算して返す
-		$scope.getTotalAmount = function(lines) {
-			var totalAmount = 0;
-		
-			angular.forEach(lines, function(orderLine) {
-				totalAmount += $scope.getSubtotal(orderLine);
-			});
-			
-			return totalAmount;			
-		};
-
-		$scope.lines = [createOrderLine()];
 	}])
-	.controller('SheetController', ['$scope', '$routeParams', 'sheets', function SheetController($scope, $params, sheets) {
-		var sheet = sheets.get($params.id);
-		angular.extend($scope, sheet);
-		
-		$scope.getSubtotal = function(orderLine) {
-			return orderLine.unitPrice * orderLine.count;
-		};
-		
-		$scope.getTotalAmount = function(lines) {
-			var totalAmount = 0;
-			
-			angular.forEach(lines, function(orderLine) {
-				totalAmount += $scope.getSubtotal(orderLine);
-			});
-			return totalAmount;
-		};
-	}])
-	
 	.service('sheets', [function() {
 		this.list = []; // 帳票リスト
 		
@@ -119,5 +95,21 @@ angular.module('ReportApp', ['ngRoute'])
 			return null;
 		};
 		
-	}]);
+	}])
+	.service('counting', function() {
+		this.getSubtotal = function(orderLine) {
+			return orderLine.unitPrice * orderLine.count;
+		};
+		
+		this.getTotalAmount = function(lines) {
+			var totalAmount = 0;
+			
+			angular.forEach(lines, function(orderLine) {
+				totalAmount += this.getSubtotal(orderLine);
+			}, this);
+			return totalAmount;
+		};
+	})
+	
+	;
 	
