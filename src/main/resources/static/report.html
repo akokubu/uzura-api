@@ -46,7 +46,7 @@
 
   <script type="text/ng-template" id="new-tmpl">
     <h1>帳票作成</h1>
-    <form ng-submit="save()">
+    <form novalidate name="sheetForm" ng-submit="save()">
       <table class="table">
         <colgroup</colgroup>
         <colgroup span="3" class="col-sm"></colgroup>
@@ -62,11 +62,11 @@
         </thead>
         <tbody>
           <tr ng-repeat="orderLine in lines">
-            <td><input class="form-control" type="text ng-model="orderLine.productName" /></th>
-            <td><input class="form-control" type="number" ng-model="orderLine.unitPrice" /></th>
-            <td><input class="form-control" type="number" ng-model="orderLine.count" /></th>
+            <td><input class="form-control" type="text" ng-model="orderLine.productName" required/></th>
+            <td><input class="form-control" type="number" ng-model="orderLine.unitPrice" required min="0" ng-pattern="/^\d+$/" /></th>
+            <td><input class="form-control" type="number" ng-model="orderLine.count" required min="0" ng-pattern="/^\d+$/" /></th>
             <td>{{ getSubtotal(orderLine) | number }}</td>
-            <td><button type="button" class="btn btn-default" ng-click="removeLine(orderLine)">削除</button></td>
+            <td><button type="button" class="btn btn-default" ng-disabled="lines.length < 2" ng-click="removeLine(orderLine)">削除</button></td>
           </tr>
         </tbody>
           <tr>
@@ -75,10 +75,17 @@
           </tr>
         </tfoot>
       </table>
+
+      <div class="alert alert-danger" ng-show="sheetForm.$invalid">
+        <span ng-show="sheetForm.$error.required">空欄が存在しています。</span>
+        <span ng-show="sheetForm.$error.min">単価、個数の最小値は0です。</span>
+        <span ng-show="sheetForm.$error.number">単価、個数は整数で指定してください。</span>
+      </div>
+
       <div>
         <button type="button" class="btn btn-primary" ng-click="addLine()">明細行を追加</button>
         <button type="button" class="btn btn-danger" ng-click="initialize()">帳票を初期化</button>
-        <button type="submit" class="btn btn-success">帳票を保存</button>
+        <button type="submit" class="btn btn-success" ng-disabled="sheetForm.$invalid">帳票を保存</button>
       </div>
     </form>
   </script>
