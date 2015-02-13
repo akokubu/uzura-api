@@ -20,7 +20,7 @@ public interface CustomerRepository {
 	public List<CustomerEntity> findAllOrderByName();
 
 	@Select
-	public List<CustomerEntity> findAllOrderByid(SelectOptions selectOptions);
+	public List<CustomerEntity> findAllOrderById(SelectOptions selectOptions);
 
 	@Select
 	public CustomerEntity findById(Integer id);

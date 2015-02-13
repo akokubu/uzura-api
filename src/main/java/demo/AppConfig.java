@@ -16,9 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 @Configuration
 @EnableTransactionManagement
@@ -27,14 +30,27 @@ public class AppConfig {
 	@Autowired
 	private DataSourceProperties properties;
 
+	@Order(Ordered.HIGHEST_PRECEDENCE)
+	@Bean
+	CharacterEncodingFilter characterEncodingFilter() {
+		CharacterEncodingFilter filter = new CharacterEncodingFilter();
+		filter.setEncoding("UTF-8");
+		filter.setForceEncoding(true);
+		return filter;
+	}
+
 	DataSource realDataSource() throws URISyntaxException {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName(properties.getDriverClassName());
 		String url, username, password;
-		String databaseUrl = System.getenv("DATABASE_URL");
+		String databaseUrl = System.getenv("CLEARDB_DATABASE_URL");
 		if (databaseUrl != null) {
 			URI dbUri = new URI(databaseUrl);
-			url = "jdbc:mysql://" + dbUri.getHost() + ":" + dbUri.getPort() + dbUri.getPath();
+			Integer port = dbUri.getPort();
+			if (port < 0) {
+				port = 3306;
+			}
+			url = "jdbc:mysql://" + dbUri.getHost() + ":" + port + dbUri.getPath() + "?reconnect=true&characterEncoding=utf8";
 			username = dbUri.getUserInfo().split(":")[0];
 			password = dbUri.getUserInfo().split(":")[1];
 		} else {
