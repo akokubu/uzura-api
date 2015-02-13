@@ -74,7 +74,22 @@ angular.module('ReportApp', ['ngRoute'])
 
 		$scope.lines = [createOrderLine()];
 	}])
-	.controller('SheetController', [function SheetController() {		
+	.controller('SheetController', ['$scope', '$routeParams', 'sheets', function SheetController($scope, $params, sheets) {
+		var sheet = sheets.get($params.id);
+		angular.extend($scope, sheet);
+		
+		$scope.getSubtotal = function(orderLine) {
+			return orderLine.unitPrice * orderLine.count;
+		};
+		
+		$scope.getTotalAmount = function(lines) {
+			var totalAmount = 0;
+			
+			angular.forEach(lines, function(orderLine) {
+				totalAmount += $scope.getSubtotal(orderLine);
+			});
+			return totalAmount;
+		};
 	}])
 	
 	.service('sheets', [function() {
