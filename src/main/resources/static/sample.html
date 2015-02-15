@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head lang="ja">
+  <meta charset="UTF-8">
+  <title>AngularJS:TODO管理</title>
+
+  <!-- 共通のヘッダ -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" href="./bower_components/bootstrap-css-only/css/bootstrap.min.css" />
+</head>
+<body ng-app="todoModule" ng-controller="pageController">
+
+  <div class="container" ng-show="show.list">
+    <div ng-controller="listController">
+      <div class="list-group">
+        <a class="list-group-item" ng-repeat="item in items">
+          <div>
+            <h4 class="list-group-item-heading">{{ item.title }}</h4>
+            <p class="list-group-item-text">{{ item.memo }}</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div ng-show="show.add">
+  </div>
+
+  <div ng-show="show.info">
+  </div>
+
+  <nav>
+    <div>
+      <a class="btn btn-default" ng-click="changePage('add')">新規</a>
+      <a class="btn btn-default" ng-click="changePage('list')">一覧</a>
+    </div>
+  </nav>
+
+  <script type="text/javascript" src="./bower_components/angular/angular.min.js"></script>
+  <script src="./app/sample.js"></script>
+  <script src="./app/sample_controller.js"></script>
+</body>
+</html>
