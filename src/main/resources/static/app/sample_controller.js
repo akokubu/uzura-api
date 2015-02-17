@@ -4,7 +4,7 @@
 (function(module) {
     'use strict';
 
-    module.controller('pageController', function($scope) {
+    module.controller('pageController', function($scope, $timeout) {
         $scope.show = {
             list: true,
             add: false,
@@ -58,6 +58,13 @@
 
     module.controller('addController', function($scope) {
        $scope.addItem = function() {
+           console.log('addItem');
+           if (!$scope.addItemForm.$valid) {
+               console.log($scope.addItemForm.$valid);
+               console.log($scope.addItemForm.$error);
+               alert('入力エラーです');
+               return;
+           }
 
            $scope.$parent.showMessage({
                type: 'alert-inf',
@@ -66,8 +73,8 @@
            });
 
            $scope.$root.$broadcast('changeItems');
-
            $scope.$parent.changePage('list');
+           $scope.item = {};
        }
     });
 }(TodoModule));
