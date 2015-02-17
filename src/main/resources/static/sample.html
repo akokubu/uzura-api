@@ -11,6 +11,13 @@
 <body ng-app="todoModule" ng-controller="pageController">
 
   <div class="container" ng-show="show.list">
+    <div ng-show="message.show">
+      <div class="alert" role="alert" ng-class="message.type">
+        <span>{{ message.text }}</span>
+      </div>
+    </div>
+
+
     <div ng-controller="listController">
       <div class="list-group">
         <a class="list-group-item" ng-repeat="item in items">
