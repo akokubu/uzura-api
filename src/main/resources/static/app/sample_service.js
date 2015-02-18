@@ -1,5 +1,5 @@
 (function(module) {
-   module.factory('Items', function($rootScope) {
-       return new app.ArrayItems($rootScope);
+   module.factory('Items', function($rootScope, $http) {
+       return new app.AjaxItems($rootScope, $http);
    });
 }(TodoModule));

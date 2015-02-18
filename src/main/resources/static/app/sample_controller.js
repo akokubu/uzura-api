@@ -73,7 +73,9 @@
     });
 
     module.controller('addController', function($scope, Items) {
-       $scope.addItem = function() {
+    	$scope.item = {};
+   
+    	$scope.addItem = function() {
            if (!$scope.addItemForm.$valid) {
                alert('入力エラーです');
                return;
