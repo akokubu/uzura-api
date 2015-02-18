@@ -4,7 +4,7 @@
 (function(module) {
     'use strict';
 
-    module.controller('pageController', function($scope, $timeout) {
+    module.controller('pageController', function($scope, $timeout, Items) {
         $scope.show = {
             list: true,
             add: false,
@@ -25,13 +25,15 @@
         };
 
         $scope.deleteItem = function(item) {
-            $scope.showMessage({
-                type: 'alert-warning',
-                text: '削除しました',
-                show: true
-            });
-            $scope.$root.$broadcast('changeItems');
-            $scope.changePage('list');
+        	
+        	Items.remove(item, function() {
+        		$scope.changePage('list');
+        		$scope.showMessage({
+        			type: 'alert-warning',
+        			text: '削除しました',
+        			show: true
+        		});
+        	});
         };
 
         $scope.changePage = function(type) {
@@ -41,6 +43,11 @@
                 } else {
                     $scope.show[name] = false;
                 }
+            }
+            if (type == 'info') {
+            	var item = Items.getCurrentItem();
+            	console.log(item);
+            	$scope.active = item;
             }
         };
     });
@@ -54,7 +61,6 @@
         // 一覧からクリックされた時の処理（詳細ページに繊維）
         $scope.show = function(item) {
             Items.setCurrentItem(item);
-//            $scope.$parent.active = item;
             $scope.$parent.changePage('info');
         };
 
@@ -64,36 +70,25 @@
                $scope.items = list;
             });
         });
-
-        $scope.items = [
-            {
-                title: 'お買い物リスト',
-                memo: '大根と豆腐を買ってくる'
-            },
-            {
-                title: '通帳記入をする',
-                memo: 'XX銀行の貯金通帳に記入する'
-            }
-        ];
     });
 
-    module.controller('addController', function($scope) {
+    module.controller('addController', function($scope, Items) {
        $scope.addItem = function() {
-           console.log('addItem');
            if (!$scope.addItemForm.$valid) {
                alert('入力エラーです');
                return;
            }
-
-           $scope.$parent.showMessage({
-               type: 'alert-info',
-               text: '追加しました',
-               show: true
+           
+           Items.add($scope.item, function(data) {
+        	   $scope.$parent.showMessage({
+        		   type: 'alert-info',
+        		   text: '追加しました',
+        		   show: true
+        	   });
+        	   $scope.$parent.changePage('list');
+        	   $scope.item = {};
            });
 
-           $scope.$root.$broadcast('changeItems');
-           $scope.$parent.changePage('list');
-           $scope.item = {};
        }
     });
 }(TodoModule));

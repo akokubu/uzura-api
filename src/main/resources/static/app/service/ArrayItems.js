@@ -32,19 +32,24 @@
         item.id = "id_" + this.serial;
         var $scope = this.$scope;
         this.items.push(item);
-        //TODO
+        
+        // データが変更されたことを通知
+        $scope.$broadcast('changeItems');
+        callback.call(this, item);
     };
 
     p.remove = function(item, callback) {
         var id = item.id;
         var tmp = new Array();
-        for (var i=0; i<this.item.length; i++) {
+        for (var i=0; i<this.items.length; i++) {
             if (item.id != this.items[i].id) {
                 tmp.push(this.items[i]);
             }
         }
         this.items = tmp;
-        //TODO
+        this.$scope.$broadcast('changeItems');
+        callback.call(this, item);
     };
+    
     app.ArrayItems = ArrayItems;
 }(this.app));
