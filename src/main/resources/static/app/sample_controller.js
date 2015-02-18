@@ -24,6 +24,16 @@
             }, 3000);
         };
 
+        $scope.deleteItem = function(item) {
+            $scope.showMessage({
+                type: 'alert-warning',
+                text: '削除しました',
+                show: true
+            });
+            $scope.$root.$broadcast('changeItems');
+            $scope.changePage('list');
+        };
+
         $scope.changePage = function(type) {
             for (var name in $scope.show) {
                 if (name == type) {
@@ -37,7 +47,8 @@
 
     module.controller('listController', function($scope) {
         $scope.show = function(item) {
-          $scope.$parent.changePage('info');
+            $scope.$parent.active = item;
+            $scope.$parent.changePage('info');
         };
 
         $scope.$on('changeItems', function() {
@@ -60,14 +71,12 @@
        $scope.addItem = function() {
            console.log('addItem');
            if (!$scope.addItemForm.$valid) {
-               console.log($scope.addItemForm.$valid);
-               console.log($scope.addItemForm.$error);
                alert('入力エラーです');
                return;
            }
 
            $scope.$parent.showMessage({
-               type: 'alert-inf',
+               type: 'alert-info',
                text: '追加しました',
                show: true
            });
