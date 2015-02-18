@@ -45,14 +45,24 @@
         };
     });
 
-    module.controller('listController', function($scope) {
+    module.controller('listController', function($scope, Items) {
+        // 一覧データを取得
+        Items.list(function(list) {
+           $scope.items = list;
+        });
+
+        // 一覧からクリックされた時の処理（詳細ページに繊維）
         $scope.show = function(item) {
-            $scope.$parent.active = item;
+            Items.setCurrentItem(item);
+//            $scope.$parent.active = item;
             $scope.$parent.changePage('info');
         };
 
+        // 一覧データが変わったときには、再度一覧データを取得しなおす
         $scope.$on('changeItems', function() {
-            alert('一覧が更新されたました');
+            Items.list(function(list) {
+               $scope.items = list;
+            });
         });
 
         $scope.items = [
