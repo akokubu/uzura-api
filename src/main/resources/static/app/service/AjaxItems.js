@@ -27,8 +27,7 @@
     		method: 'GET',
     		url: 'api/tasks'
     	}).success(function(response, status, headers, config, statusText) {
-    		console.log(config);
-    		callback.call(this, this.items);
+    		callback.call(this, response);
     	});
     };
 
@@ -42,7 +41,6 @@
         		memo: item.memo
         	}
     	}).success(function(response, status, headers, config, statusText) {
-    		console.log(config);
     		$scope.$broadcast('changeItems');
     		callback.call(this, response.data);
     	});
@@ -52,12 +50,8 @@
     	var $scope = this.$scope;
     	this.$http({
     		method: 'DELETE',
-    		url: 'api/tasks',
-    		data: {
-    			id: item.id
-    		}
+    		url: 'api/tasks/' + item.id
     	}).success(function(response, status, headers, config, statusText) {
-    		console.log(config);
     		$scope.$broadcast('changeItems');
     		callback.call(this, response);
     	});

@@ -28,11 +28,6 @@ public class TaskRestController {
 		return taskService.findAll();
 	}
 
-	@RequestMapping(value = "{id}", method = RequestMethod.GET)
-	TaskEntity getTask(@PathVariable Integer id) {
-		return taskService.findById(id);
-	}
-
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	void deleteTask(@PathVariable Integer id) {
