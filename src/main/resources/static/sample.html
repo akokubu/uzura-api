@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head lang="ja">
+  <meta charset="UTF-8">
+  <title>AngularJS:TODO管理</title>
+
+  <!-- 共通のヘッダ -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" href="./bower_components/bootstrap-css-only/css/bootstrap.min.css" />
+</head>
+<body ng-app="todoModule" ng-controller="pageController">
+
+  <nav class="navbar navbar-default" role="navigation">
+  	<div class="container-fluid">
+  		<div class="navbar-header">
+  			<span class="navbar-brand">タスク管理</span>
+  		</div>
+  	</div>
+  </nav>
+
+  <div class="container" ng-show="show.list">
+    <div ng-show="message.show">
+      <div class="alert" role="alert" ng-class="message.type">
+        <span>{{ message.text }}</span>
+      </div>
+    </div>
+
+
+    <div ng-controller="listController">
+      <div class="alert alert-info" ng-show="items.length < 1">
+      	<span>タスクはありません</span>
+      </div>
+      <div class="list-group">
+        <a class="list-group-item" ng-repeat="item in items" ng-click="show(item)">
+          <div>
+            <h4 class="list-group-item-heading">{{ item.title }}</h4>
+            <p class="list-group-item-text">{{ item.memo }}</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div ng-show="show.add">
+    <form role="form" name="addItemForm" ng-controller="addController">
+      <div ng-show="!addItemForm.$valid">
+        <div class="alert alert-warning" role="alert">必須項目を入力してください。</div>
+      </div>
+      <div class="form-group">
+        <label>件名(*)</label>
+        <input type="text" class="form-control" placeholder="タスク名を入力" required ng-model="item.title" />
+      </div>
+      <div class="form-group">
+        <label>メモ(*)</label>
+        <input type="text" class="form-control" placeholder="メモを入力" required ng-model="item.memo" />
+      </div>
+      <button type="button" class="btn btn-primary btn-block" ng-click="addItem()">追加</button>
+
+
+    </form>
+  </div>
+
+  <div ng-show="show.info">
+    <div>
+      <h1>{{ active.title }}</h1>
+      <p>{{ active.memo }}</p>
+    </div>
+    <div>
+      <button class="btn btn-warning btn-block" ng-click="deleteItem(active)">削除する</button>
+    </div>
+
+  </div>
+
+  <nav class="navbar-fixed-bottom">
+    <div class="btn-group btn-grpu-justified">
+      <a class="btn btn-default" ng-click="changePage('add')">新規</a>
+      <a class="btn btn-default" ng-click="changePage('list')">一覧</a>
+    </div>
+  </nav>
+
+  <script type="text/javascript" src="./bower_components/angular/angular.min.js"></script>
+  <script src="./app/sample.js"></script>
+ <!--  <script src="./app/service/ArrayItems.js"></script> -->
+  <script src="./app/service/AjaxItems.js"></script>
+  <script src="./app/sample_controller.js"></script>
+  <script src="./app/sample_service.js"></script>
+</body>
+</html>
